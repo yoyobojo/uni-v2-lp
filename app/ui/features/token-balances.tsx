@@ -1,5 +1,3 @@
-"use client"
-
 import { useBalances } from "@/hooks/balances"
 import { IListItem, List } from "@/ui/components/list"
 

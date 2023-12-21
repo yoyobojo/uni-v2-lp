@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 import { Navbar } from "./navbar";
 import { Footer } from "./footer";
-import { Section } from "../components/section";
+import { Section } from "@/ui/components/section";
 
 type IWrapper = {
   children: ReactNode;

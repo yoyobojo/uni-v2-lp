@@ -20,6 +20,7 @@ export const useInput = () => {
     input,
     handleChange,
     clear,
-    handleMax
+    handleMax,
+    setInput
   }
 }

@@ -8,19 +8,19 @@ type IButton = {
 
 export const Button = ({ children, onClick, type }: IButton) => {
   const styles = () => {
-    const base = "";
+    const base = "px-4 py-2 rounded border";
     let custom = "";
     switch (type) {
       case 'outline': {
-        custom = "";
+        custom = "border";
         break;
       }
       case 'secondary': {
-        custom = "";
+        custom = "border-transparent bg-gray-800 text-white";
         break;
       }
       default: {
-        custom = "";
+        custom = "border-transparent bg-indigo-700 text-white";
         break;
       }
     }

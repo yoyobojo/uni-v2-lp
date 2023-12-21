@@ -11,7 +11,7 @@ export function getChainId() {
   return getNetwork().chain?.id || walletChain.id;
 }
 
-export function getProviderByChainId (chainId = walletChain.id) {
+export function getProvider (chainId = walletChain.id) {
   switch (chainId) {
     case 11155111:
       return alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" });
@@ -20,8 +20,18 @@ export function getProviderByChainId (chainId = walletChain.id) {
   }
 }
 
-export function getTokensByChainId (chainId = walletChain.id) {
+export function getTokensList (chainId = walletChain.id) {
   return TOKENS.filter((el) => el.chainId === (chainId ? chainId : getChainId()));
+}
+
+export function getToken (address: IAddress, chainId = walletChain.id): IToken | undefined {
+  return getTokensList(chainId).find(el => el?.address?.toLowerCase() === address.toLowerCase());
+}
+
+export function getAddressBySymbol (symbol: string, chainId = walletChain.id): IAddress {
+  if(!symbol) return zeroAddress;
+  const token = getTokensList(chainId).find(el => el?.symbol?.toLowerCase() === symbol.toLowerCase());
+  return (token?.address || zeroAddress) as IAddress;
 }
 
 export function sortTokensBySymbol (a: IToken, b: IToken) {
@@ -47,7 +57,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
       if (SYMBOL_CACHE?.[chainId]?.[address]) return SYMBOL_CACHE[chainId][address];
 
       // If in token list, return symbol
-      const match = getTokensByChainId(chainId).find(
+      const match = getTokensList(chainId).find(
           (v) => v?.address?.toLowerCase() === address?.toLowerCase(),
       );
       if (match) return match.symbol;
@@ -81,7 +91,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
     if (DECIMAL_CACHE?.[chainId]?.[address]) return DECIMAL_CACHE[chainId][address];
 
     // If in token list, return decimal
-    const match = getTokensByChainId(chainId).find(
+    const match = getTokensList(chainId).find(
         (v) => v?.address?.toLowerCase() === address?.toLowerCase(),
     );
     if (match) return match.decimals;

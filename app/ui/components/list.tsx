@@ -11,7 +11,7 @@ type IList = {
 export const List = ({ items, loading }: IList) => {
   return (
     <ul>
-      {items.map((el, i) => {
+      {!loading && items.map((el, i) => {
         // If list is just string
         if(typeof el === 'string') {
           return (
@@ -24,7 +24,7 @@ export const List = ({ items, loading }: IList) => {
         return (
             <li key={`list-item-${i}`} className="flex items-center justify-between">
               <span>{el.label}</span>
-              <span className="font-semibold">{loading ? 'Loading' : el?.value || '0'}</span>
+<span className="font-semibold">{el.value}</span>
             </li>
         )
       })}
