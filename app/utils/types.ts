@@ -10,3 +10,5 @@ export type IToken = {
   };
   balance?: string;
 };
+
+export type IAddress = `0x${string}`
