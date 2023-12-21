@@ -8,17 +8,21 @@ import { Button } from "@/ui/components/button";
 import { Card } from "@/ui/components/card";
 import { useLiquidity } from "./hooks/liquidity";
 import { parseEther, parseUnits } from "viem";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Home = () => {
+  const { address } = useAccount();
   const weth = getAddressBySymbol("weth");
   const usdc = getAddressBySymbol("usdc");
   const liquidityProps = useLiquidity({ tokenA: usdc, tokenB: weth });
 
-  console.log(liquidityProps)
-
   return (
     <Wrapper>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
+      {!address ? (
+        <ConnectButton />
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
         <Card title="Wallet Balances">
           <TokenBalances />
         </Card>
@@ -28,6 +32,7 @@ const Home = () => {
           innerClass="flex flex-col gap-4"
         >
           <PairInput 
+            disableB={true}
             {...liquidityProps}
           />
 
@@ -58,6 +63,7 @@ const Home = () => {
           )}
         </Card>
       </div>
+      )}
     </Wrapper>
   );
 };

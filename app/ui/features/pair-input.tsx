@@ -1,6 +1,5 @@
 import { IAddress } from "@/utils/types"
 import { CoinInput } from "./token-input"
-import { useInput } from "@/hooks/input";
 import { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 
 type ICoinInput = {
@@ -11,7 +10,8 @@ type ICoinInput = {
   setInputA: Dispatch<SetStateAction<string>>;
   setInputB:Dispatch<SetStateAction<string>>;
   handleChangeA: ChangeEventHandler<HTMLInputElement>;
-  handleChangeB: ChangeEventHandler<HTMLInputElement>
+  handleChangeB: ChangeEventHandler<HTMLInputElement>;
+  disableB?: boolean;
 }
 
 export const PairInput = ({ 
@@ -22,7 +22,8 @@ export const PairInput = ({
   setInputA,
   setInputB,
   handleChangeA,
-  handleChangeB
+  handleChangeB,
+  disableB
 }: ICoinInput) => {
   return (
     <div className="flex flex-col gap-2">
@@ -30,7 +31,7 @@ export const PairInput = ({
     <div className="flex justify-center">
       <span>+</span>
     </div>
-    <CoinInput token={tokenB} value={inputB} setValue={setInputB} onChange={handleChangeB} />
+    <CoinInput disabled={disableB} token={tokenB} value={inputB} setValue={setInputB} onChange={handleChangeB} />
     </div>
   )
 }

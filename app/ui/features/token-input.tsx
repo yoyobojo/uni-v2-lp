@@ -8,11 +8,11 @@ type ICoinInput = {
   value: string;
   setValue: Dispatch<SetStateAction<string>>;
   max?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  disabled?: boolean;
 }
 
-export const CoinInput = ({ token, value, setValue, onChange, max }: ICoinInput) => {
-  const tokenDetails = getToken(token);
+export const CoinInput = ({ token, value, setValue, onChange, max, disabled }: ICoinInput) => {
   return (
     <div className="flex flex-col">
       <span></span>
@@ -21,6 +21,7 @@ export const CoinInput = ({ token, value, setValue, onChange, max }: ICoinInput)
           value={value}
           onChange={onChange}
           className="flex-grow"
+          disabled={disabled}
         />
                 <TokenDisplay token={token} />
       </div>

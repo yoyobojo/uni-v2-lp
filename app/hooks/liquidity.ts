@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useInput } from "./input";
 import { IAddress } from "@/utils/types";
 import { writeContract, prepareWriteContract, erc20ABI, waitForTransaction, readContracts, readContract } from '@wagmi/core';
-import { parseUnits } from "viem";
-import { getDecimals } from "@/utils/helpers";
-import { DEFAULT_CHAIN_ID, UNI_V2_ROUTER } from "@/utils/constants";
+import { formatUnits, parseUnits } from "viem";
+import { calculateTokenB, getDecimals } from "@/utils/helpers";
+import { DEFAULT_CHAIN_ID, UNI_V2_ROUTER, UNI_V2_USDC_WETH } from "@/utils/constants";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
-import { abi as RouterABI } from "../abis/IUniswapV2Router02.json";
 
 const ROUTER_ABI = require('../abis/IUniswapV2Router02.json').abi;
+const PAIR_ABI = require('../abis/IUniswapV2Pair.json').abi;
 
 const DEADLINE = Math.floor(Date.now() / 1000) + 300; // 5 minutes from now
 
@@ -47,17 +47,10 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
       return;
     }
 
+    setLoading({ ...loading, deposit: true });
+    const toastId = toast.loading('Adding liquidity', { toastId: 'addLiquidity' })
     try {
-      setLoading({ ...loading, deposit: true });
-
-      const factoryAddress = await readContract({
-        address: UNI_V2_ROUTER,
-        abi: ROUTER_ABI,
-        functionName: 'factory',
-        args: []
-      });
-
-
+      
       const bigNumberDesiredA = parseUnits(inputA, decimals.tokenA);
       const bigNumberDesiredB = parseUnits(inputB, decimals.tokenB);
       const bigNumberMinA = parseUnits((Number(inputA) * 0.95).toString(), decimals.tokenA);
@@ -79,12 +72,13 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
         ]
       });
       const addLiqTx = await writeContract(prepAddLiqTx.request);
-      await waitForTransaction({ hash: addLiqTx.hash })
-      toast.success('Asset approved', { toastId: 'approve' })
+      const waited = await waitForTransaction({ hash: addLiqTx.hash });
+      console.log("Liquidity Added:", waited);
+      toast.success('Transaction successful', { toastId })
       setLoading({ ...loading, deposit: false })
     } catch (e) {
       console.error(e);
-      toast.error('Error occured while adding liquidity', { toastId: 'addLiquidity' })
+      toast.error('Error occured while adding liquidity', { toastId })
       setLoading({ ...loading, deposit: false })
     }
   }
@@ -186,6 +180,23 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
       });
     })().catch(e => console.error(e));
   }, []);
+
+  // Calculate amount out
+  useEffect(() => {
+    (async () => {
+      if(inputA) {
+        const [ reserve0, reserve1 ] = await readContract({
+          address: UNI_V2_USDC_WETH,
+          abi: PAIR_ABI,
+          functionName: 'getReserves',
+          args: []
+        });
+        const amountB = calculateTokenB(parseUnits(inputA, decimals.tokenA), reserve1, reserve0);
+        console.log("amount B", amountB)
+        setInputB(formatUnits(amountB, decimals.tokenB))
+      }
+    })().catch(e => console.error(e))
+  }, [inputA])
 
   return {
     inputA,

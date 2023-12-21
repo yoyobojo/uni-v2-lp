@@ -107,3 +107,16 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
         return 18;
       }
 }
+
+export function calculateTokenB(amountA: bigint, reserveB: bigint, reserveA: bigint) {
+  return (amountA * reserveB) / reserveA;
+}
+
+export function calculateTokenA(amountB: bigint, reserveB: bigint, reserveA: bigint) {
+  return (amountB * reserveA) / reserveB;
+}
+
+export function calculateMinOut(input: bigint, ratio: bigint) {
+  (input * ratio) / BigInt(100)
+}
+
