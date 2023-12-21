@@ -1,9 +1,10 @@
-import { configureChains, createConfig, sepolia, mainnet } from "wagmi";
+import { configureChains, createConfig, mainnet } from "wagmi";
+import { localhost } from "viem/chains";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-const walletChain = process.env.NEXT_PUBLIC_CHAIN_ID === "11155111" ? sepolia : mainnet;
+const walletChain = process.env.NEXT_PUBLIC_NETWORK === "localhost" ? localhost : mainnet;
 const { chains: walletChains, publicClient, webSocketPublicClient } = configureChains(
   [walletChain],
   [

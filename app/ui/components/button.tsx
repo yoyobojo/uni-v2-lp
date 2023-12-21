@@ -1,14 +1,17 @@
 import { MouseEventHandler, ReactNode } from "react"
+import { ImSpinner8 } from "react-icons/im";
 
 type IButton = {
   children?: ReactNode | string;
   type?: 'primary' | 'secondary' | 'outline';
-  onClick?: MouseEventHandler<HTMLButtonElement>
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
+  loading?: boolean;
 }
 
-export const Button = ({ children, onClick, type }: IButton) => {
+export const Button = ({ children, onClick, type, disabled, loading }: IButton) => {
   const styles = () => {
-    const base = "px-4 py-2 rounded border";
+    const base = "px-4 py-2 rounded border disabled:opacity-70 disabled:cursor-not-allowed";
     let custom = "";
     switch (type) {
       case 'outline': {
@@ -28,8 +31,11 @@ export const Button = ({ children, onClick, type }: IButton) => {
   }
 
   return (
-    <button onClick={onClick} className={styles()}>
-      {children}
+    <button onClick={onClick} className={styles()} disabled={disabled || loading}>
+      <div className="flex items-center gap-1 justify-center">
+        <span>{children}</span>
+        {loading && <span className="animate-spin"><ImSpinner8 /></span>}
+      </div>
     </button>
   )
 }

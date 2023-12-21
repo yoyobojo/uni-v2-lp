@@ -17,11 +17,12 @@ export const CoinInput = ({ token, value, setValue, onChange, max }: ICoinInput)
     <div className="flex flex-col">
       <span></span>
       <div className="flex items-center gap-2">
-        <TokenDisplay token={token} />
         <input 
           value={value}
           onChange={onChange}
+          className="flex-grow"
         />
+                <TokenDisplay token={token} />
       </div>
       {max && <span>{max}</span>}
     </div>

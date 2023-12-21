@@ -1,34 +1,28 @@
-import { DECIMAL_CACHE, SYMBOL_CACHE, TOKENS } from "./constants";
+import { DECIMAL_CACHE, DEFAULT_CHAIN_ID, SYMBOL_CACHE, TOKENS } from "./constants";
 import { getNetwork, readContract } from '@wagmi/core'
-import { getAddress, isAddress, zeroAddress } from "viem";
+import { getAddress, isAddress, parseUnits, zeroAddress } from "viem";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { erc20ABI } from "wagmi";
 import { IAddress, IToken } from "./types";
-import { walletChain } from "../config/wallet";
 
 // Web3
 export function getChainId() {
-  return getNetwork().chain?.id || walletChain.id;
+  return getNetwork().chain?.id || DEFAULT_CHAIN_ID
 }
 
-export function getProvider (chainId = walletChain.id) {
-  switch (chainId) {
-    case 11155111:
-      return alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" });
-    default:
-      return alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" })
-  }
+export function getProvider (chainId = DEFAULT_CHAIN_ID) {
+  return alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" })  
 }
 
-export function getTokensList (chainId = walletChain.id) {
+export function getTokensList (chainId = DEFAULT_CHAIN_ID) {
   return TOKENS.filter((el) => el.chainId === (chainId ? chainId : getChainId()));
 }
 
-export function getToken (address: IAddress, chainId = walletChain.id): IToken | undefined {
+export function getToken (address: IAddress, chainId = DEFAULT_CHAIN_ID): IToken | undefined {
   return getTokensList(chainId).find(el => el?.address?.toLowerCase() === address.toLowerCase());
 }
 
-export function getAddressBySymbol (symbol: string, chainId = walletChain.id): IAddress {
+export function getAddressBySymbol (symbol: string, chainId = DEFAULT_CHAIN_ID): IAddress {
   if(!symbol) return zeroAddress;
   const token = getTokensList(chainId).find(el => el?.symbol?.toLowerCase() === symbol.toLowerCase());
   return (token?.address || zeroAddress) as IAddress;
@@ -46,7 +40,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
   return balanceB - balanceA;
 };
   
-  export async function getSymbol(address: string, chainId = walletChain.id) {
+  export async function getSymbol(address: string, chainId = DEFAULT_CHAIN_ID) {
       if (!address || !isAddress(address)) return address || '';
       address = getAddress(address);
   
@@ -80,7 +74,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
         }
   }
 
-  export async function getDecimals(address: string, chainId = walletChain.id) {
+  export async function getDecimals(address: string, chainId = DEFAULT_CHAIN_ID) {
     if (!address || !isAddress(address)) return 18;
     address = getAddress(address);
 
