@@ -2,7 +2,7 @@ import { useBalances } from "@/hooks/balances"
 import { IListItem, List } from "@/ui/components/list"
 
 export const TokenBalances = () => {
-  const { ethBalance, usdcBalance, wethBalance, balancesLoading } = useBalances();
+  const { ethBalance, usdcBalance, wethBalance, balancesLoading, lpBalance } = useBalances();
 
   const renderList = (): IListItem[] => {
     return [
@@ -17,6 +17,10 @@ export const TokenBalances = () => {
       {
         label: 'USDC',
         value: usdcBalance?.formatted
+      },
+      {
+        label: 'USDC/WETH LP',
+        value: lpBalance?.formatted
       }
     ]
   }

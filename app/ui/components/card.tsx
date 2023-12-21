@@ -14,6 +14,7 @@ export const Card = ({ children, className, title, innerClass }: ICard) => {
       "bg-gray-300",
       "p-2.5 md:p-3 md:py-4 lg:px-4",
       "rounded",
+      "shadow"
     ].join(" ")}>
               {title && <h5 className="font-semibold text-xl mb-3">{title}</h5>}
       <div className={innerClass}>
