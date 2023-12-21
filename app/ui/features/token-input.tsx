@@ -23,6 +23,7 @@ export const CoinInput = ({ token, value, setValue, onChange, max, disabled }: I
             onChange={onChange}
             className="w-full p-2 rounded"
             disabled={disabled}
+            type="number"
           />
         </div>
         <TokenDisplay token={token} />
