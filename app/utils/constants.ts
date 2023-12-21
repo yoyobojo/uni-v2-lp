@@ -11,5 +11,4 @@ export const SYMBOL_CACHE: Record<number, Record<string, string>> = {
 };
 
 // Web3
-export const DEFAULT_CHAIN_ID = 1;
 export const TOKENS: IToken[] = require('./token-list.json').tokens;

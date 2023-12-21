@@ -1,16 +1,17 @@
-import { DECIMAL_CACHE, DEFAULT_CHAIN_ID, SYMBOL_CACHE, TOKENS } from "./constants";
+import { DECIMAL_CACHE, SYMBOL_CACHE, TOKENS } from "./constants";
 import { getNetwork, readContract } from '@wagmi/core'
 import { getAddress, isAddress, zeroAddress } from "viem";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { erc20ABI } from "wagmi";
 import { IAddress, IToken } from "./types";
+import { walletChain } from "../config/wallet";
 
 // Web3
 export function getChainId() {
-  return getNetwork().chain?.id || DEFAULT_CHAIN_ID;
+  return getNetwork().chain?.id || walletChain.id;
 }
 
-export function getProviderByChainId (chainId = DEFAULT_CHAIN_ID) {
+export function getProviderByChainId (chainId = walletChain.id) {
   switch (chainId) {
     case 11155111:
       return alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "" });
@@ -19,7 +20,7 @@ export function getProviderByChainId (chainId = DEFAULT_CHAIN_ID) {
   }
 }
 
-export function getTokensByChainId (chainId = DEFAULT_CHAIN_ID) {
+export function getTokensByChainId (chainId = walletChain.id) {
   return TOKENS.filter((el) => el.chainId === (chainId ? chainId : getChainId()));
 }
 
@@ -35,7 +36,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
   return balanceB - balanceA;
 };
   
-  export async function getSymbol(address: string, chainId = DEFAULT_CHAIN_ID) {
+  export async function getSymbol(address: string, chainId = walletChain.id) {
       if (!address || !isAddress(address)) return address || '';
       address = getAddress(address);
   
@@ -69,7 +70,7 @@ export function sortTokensByBalance (a: IToken, b: IToken) {
         }
   }
 
-  export async function getDecimals(address: string, chainId = DEFAULT_CHAIN_ID) {
+  export async function getDecimals(address: string, chainId = walletChain.id) {
     if (!address || !isAddress(address)) return 18;
     address = getAddress(address);
 

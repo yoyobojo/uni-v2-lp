@@ -1,12 +1,11 @@
-import { configureChains, createConfig } from "wagmi";
+import { configureChains, createConfig, sepolia, mainnet } from "wagmi";
 import { getDefaultWallets } from "@rainbow-me/rainbowkit";
-import { mainnet, goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 
-const chain = process.env.NEXT_PUBLIC_CHAIN_ID === "11155111" ? goerli : mainnet;
+const walletChain = process.env.NEXT_PUBLIC_CHAIN_ID === "11155111" ? sepolia : mainnet;
 const { chains: walletChains, publicClient, webSocketPublicClient } = configureChains(
-  [chain],
+  [walletChain],
   [
     alchemyProvider({
       apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY ?? "",
@@ -27,6 +26,7 @@ const walletConfig = createConfig({
 });
 
 export {
+  walletChain,
   walletConfig,
   walletChains
 }
