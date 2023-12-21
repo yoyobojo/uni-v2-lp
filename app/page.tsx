@@ -20,7 +20,9 @@ const Home = () => {
   return (
     <Wrapper>
       {!address ? (
+        <div className="w-full h-full flex items-center justify-center">
         <ConnectButton />
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4 md:gap-6 lg:gap-8">
         <Card title="Wallet Balances">
