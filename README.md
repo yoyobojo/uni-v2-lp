@@ -33,6 +33,7 @@ Forknet
 4. Confirm your localhost network in your wallet provider is set to: 
   - RPC URL: http://localhost:8545 
   - Chain ID: 1
+*Note: you will see your wallet say "Wrong Network" as it expects chain id 1337 for it's default localhost, but that's okay :)*
 
 
 ## Directory
