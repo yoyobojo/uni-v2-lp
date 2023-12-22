@@ -3,7 +3,7 @@
   <h3 align="center">Uniswap V2 USDC/WETH LP | Add Liquidity</h3>
 
   <p align="center">
-    Simple NextJS + tailwindcss + wagmi + viem project where you can add liquidity to Uniswap's V2 USDC/WETH pool.
+    Simple UI where you can add liquidity to Uniswap's V2 USDC/WETH pool
     <br />
     <a href="https://uni-v2-lp.vercel.app/"><strong>View Demo »</strong></a>
     <br />
@@ -13,7 +13,29 @@
 
 ### Built With
 
-* [![Next][Next.js]][Next-url]
+* [![Next][Next.js]]
+* [![Wagmi][Wagmi]]
+* [![Viem][Viem]]
+* [![TailwindCSS][TailwindCSS]]
+
+
+## Directory
+
+```bash
+├── app
+│   ├── abis            # smart contract ABIs
+│   ├── config          # wallet and react-toastify config
+│   ├── hooks           # this is where the magic happens
+│   ├── ui              # UI functional components
+│   ├── utils           # utilities
+│   ├── ...             
+│   ├── layout.tsx      # rendering metadata
+│   ├── page.tsx        # render home page
+│   └── providers.tsx   # global app contexts
+├── public
+├── ...
+└── yarn.lock
+```
 
 
 <!-- GETTING STARTED -->
