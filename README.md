@@ -58,6 +58,7 @@ Forknet
 ## Roadmap
 
 - [ ] Add removeLiquidity
+- [ ] Optimize toast notifications
 
 <!-- LICENSE -->
 ## License
