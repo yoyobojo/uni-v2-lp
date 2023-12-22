@@ -9,7 +9,7 @@ export const TokenDisplay = ({ token }: ITokenDisplay) => {
   const tokenDetails = getToken(token);
   return (
     <div className="flex gap-1 items-center">
-      <img src={tokenDetails?.logoURI ?? ""} alt="" height="30" width="30" />
+      <img src={tokenDetails?.logoURI ?? ""} alt="" height="26" width="26" />
       <span>{tokenDetails?.symbol}</span>
     </div>
 
