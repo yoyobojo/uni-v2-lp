@@ -3,10 +3,11 @@ import { useInput } from "./input";
 import { IAddress } from "@/utils/types";
 import { writeContract, prepareWriteContract, erc20ABI, waitForTransaction, readContracts, readContract } from '@wagmi/core';
 import { formatUnits, parseUnits } from "viem";
-import { calculateTokenB, getDecimals } from "@/utils/helpers";
+import { calculateTokenB, getDecimals, getToken } from "@/utils/helpers";
 import { DEFAULT_CHAIN_ID, UNI_V2_ROUTER, UNI_V2_USDC_WETH } from "@/utils/constants";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
+import { renderToast } from "@/config/toastify";
 
 const ROUTER_ABI = require('../abis/IUniswapV2Router02.json').abi;
 const PAIR_ABI = require('../abis/IUniswapV2Pair.json').abi;
@@ -39,16 +40,17 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
   async function addLiquidity() {
     if(!inputA || !inputB) return;
     if(!approveEnoughA) {
+      renderToast('add-liq', 'error', `Not approved enough ${getToken(tokenA)?.symbol || 'token A'}`)
       toast.error('Not approved enough token A', { toastId: 'addLiquidity' });
       return;
     }
     if(!approveEnoughB) {
-      toast.error('Not approved enough token B', { toastId: 'addLiquidity' });
+      renderToast('add-liq', 'error', `Not approved enough ${getToken(tokenB)?.symbol || 'token B'}`)
       return;
     }
 
     setLoading({ ...loading, deposit: true });
-    const toastId = toast.loading('Adding liquidity', { toastId: 'addLiquidity' })
+    renderToast('add-liq', 'pending', 'Adding liquidity')
     try {
       
       const bigNumberDesiredA = parseUnits(inputA, decimals.tokenA);
@@ -72,13 +74,16 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
         ]
       });
       const addLiqTx = await writeContract(prepAddLiqTx.request);
+      renderToast('add-liq', 'pending', 'Transaction Submitted')
       const waited = await waitForTransaction({ hash: addLiqTx.hash });
+      renderToast('add-liq', 'success', 'Added liquidity', addLiqTx.hash)
       console.log("Liquidity Added:", waited);
-      toast.success('Transaction successful', { toastId })
-      setLoading({ ...loading, deposit: false })
+      setLoading({ ...loading, deposit: false });
+      clearA();
+      clearB();
     } catch (e) {
       console.error(e);
-      toast.error('Error occured while adding liquidity', { toastId })
+      renderToast('add-liq', 'error', 'Error occured')
       setLoading({ ...loading, deposit: false })
     }
   }
@@ -117,7 +122,7 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
     setLoading({ ...loading, [approveStateKey]: true });
 
     try {
-      toast.loading('Approving asset', { toastId: 'approve' })
+      renderToast('approve', 'pending', `Approving ${getToken(which === 'a' ? tokenA : tokenB)?.symbol}`)
       // Convert amount to big number
       const bigNumberValue = parseUnits(value, dec)
 
@@ -130,12 +135,13 @@ export const useLiquidity = ({ tokenA, tokenB }: { tokenA: IAddress; tokenB: IAd
         chainId: DEFAULT_CHAIN_ID
       });
       const approveTx = await writeContract(prepApproveTx.request);
+      renderToast('approve', 'pending', `Submitted transaction`)
       await waitForTransaction({ hash: approveTx.hash })
-      toast.success('Asset approved', { toastId: 'approve' })
+      renderToast('approve', 'success', `${getToken(which === 'a' ? tokenA : tokenB)?.symbol} approved`)
       setApproved({ ...approved, [approveStateKey]: bigNumberValue });
       setLoading({ ...loading, [approveStateKey]: false });
     } catch (e) {
-      toast.error('Error occured on approval', { toastId: 'approve' })
+      toast.error('Error occured', { toastId: 'approve' })
       console.error(e);
       setLoading({ ...loading, [approveStateKey]: false })
     }

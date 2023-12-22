@@ -5,6 +5,17 @@ import { alchemyProvider } from "wagmi/providers/alchemy";
 import { erc20ABI } from "wagmi";
 import { IAddress, IToken } from "./types";
 
+// Format
+export function truncate(s: string, amount?: number) {
+  if (!s) return s;
+  if (s.match(/\.drip$/) && s.length < 30) return s;
+  return `${s.slice(0, amount ? amount : 4)}...${s.slice(amount ? amount * -1 : -4)}`;
+}
+
+export function fixNumber(value: number | string) {
+  return Math.round((Number(value) + Number.EPSILON) * 100) / 100
+}
+
 // Web3
 export function getChainId() {
   return getNetwork().chain?.id || DEFAULT_CHAIN_ID

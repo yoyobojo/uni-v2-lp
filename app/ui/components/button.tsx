@@ -11,7 +11,7 @@ type IButton = {
 
 export const Button = ({ children, onClick, type, disabled, loading }: IButton) => {
   const styles = () => {
-    const base = "px-4 py-2 rounded border disabled:opacity-70 disabled:cursor-not-allowed";
+    const base = "px-4 py-2 rounded border disabled:opacity-60 disabled:cursor-not-allowed";
     let custom = "";
     switch (type) {
       case 'outline': {

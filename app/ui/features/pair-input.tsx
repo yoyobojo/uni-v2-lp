@@ -12,6 +12,7 @@ type ICoinInput = {
   handleChangeA: ChangeEventHandler<HTMLInputElement>;
   handleChangeB: ChangeEventHandler<HTMLInputElement>;
   disableB?: boolean;
+  disableA?: boolean;
 }
 
 export const PairInput = ({ 
@@ -23,11 +24,12 @@ export const PairInput = ({
   setInputB,
   handleChangeA,
   handleChangeB,
-  disableB
+  disableB,
+  disableA
 }: ICoinInput) => {
   return (
     <div className="flex flex-col gap-2">
-    <CoinInput token={tokenA} value={inputA} setValue={setInputA} onChange={handleChangeA} />
+    <CoinInput disabled={disableA} token={tokenA} value={inputA} setValue={setInputA} onChange={handleChangeA} />
     <div className="flex justify-center">
       <span>+</span>
     </div>
