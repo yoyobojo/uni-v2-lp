@@ -13,10 +13,26 @@
 
 ### Built With
 
-* [![Next][Next.js]]
-* [![Wagmi][Wagmi]]
-* [![Viem][Viem]]
-* [![TailwindCSS][TailwindCSS]]
+* Next.js
+* Wagmi
+* Viem
+* TailwindCSS
+
+
+
+## Getting Started
+
+Mainnet
+1. Run `yarn` (if haven't already)
+2. Run `yarn dev`
+
+Forknet
+1. Run a forked mainnet node targeting Chain ID 1 (Recommended: Use [anvil](https://book.getfoundry.sh/getting-started/installation) with `anvil --fork-url <mainnet-rpc-url>`)
+2. Run `yarn` (if haven't already)
+3. Run `yarn dev:local`
+4. Confirm your localhost network in your wallet provider is set to: 
+  - RPC URL: http://localhost:8545 
+  - Chain ID: 1
 
 
 ## Directory
@@ -36,14 +52,6 @@
 ├── ...
 └── yarn.lock
 ```
-
-
-<!-- GETTING STARTED -->
-
-## Getting Started
-
-1. Run `yarn`
-2. Run `yarn dev`
 
 
 <!-- ROADMAP -->
